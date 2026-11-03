@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router";
 import { Navbar } from "./components/Navbar";
 import { RankingPage } from "./pages/RankingPage";
 import { MyGamesPage } from "./pages/MyGamesPage";
+import { GameDetailPage } from "./pages/GameDetailPage";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
           <Route path="/" element={<Navigate to="/classement" replace />} />
           <Route path="/classement" element={<RankingPage />} />
           <Route path="/mes-jeux" element={<MyGamesPage />} />
+          <Route path="/jeux/:id" element={<GameDetailPage />} />
           <Route path="*" element={<p>Page introuvable.</p>} />
         </Routes>
       </main>

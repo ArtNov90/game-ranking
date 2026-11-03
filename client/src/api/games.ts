@@ -16,6 +16,17 @@ export async function fetchGames(status?: GameStatus): Promise<Game[]> {
   return response.json();
 }
 
+export async function fetchGame(id: number): Promise<Game> {
+  const response = await fetch(`/api/games/${id}`);
+  if (response.status === 404) {
+    throw new Error("Ce jeu n'existe pas.");
+  }
+  if (!response.ok) {
+    throw new Error("Impossible de charger le jeu.");
+  }
+  return response.json();
+}
+
 export async function createGame(input: GameInput): Promise<Game> {
   const response = await fetch("/api/games", {
     method: "POST",

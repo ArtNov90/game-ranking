@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import type { Game } from "../types";
 import { formatScore } from "../utils";
 
@@ -8,7 +9,10 @@ type Props = {
 
 export function GameCard({ game, rank }: Props) {
   return (
-    <article className="flex items-center gap-4 rounded-xl bg-slate-800 p-4">
+    <Link
+      to={`/jeux/${game.id}`}
+      className="flex items-center gap-4 rounded-xl bg-slate-800 p-4 transition hover:bg-slate-700"
+    >
       <span className="w-10 text-2xl font-bold text-slate-500">#{rank}</span>
 
       {game.coverUrl ? (
@@ -44,6 +48,6 @@ export function GameCard({ game, rank }: Props) {
           <span className="text-slate-400">/20</span>
         </div>
       )}
-    </article>
+    </Link>
   );
 }

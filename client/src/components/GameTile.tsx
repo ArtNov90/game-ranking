@@ -1,4 +1,5 @@
 import type { Game, GameStatus } from "../types";
+import { Link } from "react-router";
 import { STATUS_LABELS, STATUS_ORDER, formatScore } from "../utils";
 
 type Props = {
@@ -20,7 +21,9 @@ export function GameTile({ game, onStatusChange, onEdit }: Props) {
 
       <div className="flex flex-col gap-2 p-3">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold leading-tight">{game.title}</h3>
+          <Link to={`/jeux/${game.id}`} className="font-semibold leading-tight hover:underline">
+          {game.title}
+          </Link>
           {game.totalScore !== null && (
             <span className="font-bold text-emerald-400">{formatScore(game.totalScore)}</span>
           )}
