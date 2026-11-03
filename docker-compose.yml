@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:17
+    container_name: game-ranking-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: arthur
+      POSTGRES_PASSWORD: arthur
+      POSTGRES_DB: game_ranking
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

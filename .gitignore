@@ -1,0 +1,21 @@
+# Dépendances
+node_modules/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Fichiers générés
+server/generated/
+dist/
+
+# Logs et fichiers système
+*.log
+Thumbs.db
+
+# Fichiers d'aide pour les assistants IA (créés par prisma init)
+server/.agents/
+server/.claude/
+server/.windsurf/
+server/skills-lock.json

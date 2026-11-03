@@ -1,0 +1,9 @@
+-- CreateEnum
+CREATE TYPE "GameStatus" AS ENUM ('BACKLOG', 'IN_PROGRESS', 'COMPLETED');
+
+-- AlterTable
+ALTER TABLE "Game" ADD COLUMN     "status" "GameStatus" NOT NULL DEFAULT 'COMPLETED',
+ALTER COLUMN "playTimeHours" DROP NOT NULL,
+ALTER COLUMN "storyScore" DROP NOT NULL,
+ALTER COLUMN "gameplayScore" DROP NOT NULL,
+ALTER COLUMN "artScore" DROP NOT NULL;

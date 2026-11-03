@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Platform {
+  XBOX
+  PS5
+}
+
+enum GameStatus {
+  BACKLOG
+  IN_PROGRESS
+  COMPLETED
+}
+
+model Game {
+  id            Int        @id @default(autoincrement())
+  rawgId        Int?
+  title         String
+  coverUrl      String?
+  platform      Platform
+  status        GameStatus @default(COMPLETED)
+  playTimeHours Int?
+  storyScore    Int?
+  gameplayScore Int?
+  artScore      Int?
+  review        String?    @db.Text
+  playedAt      DateTime   @default(now())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
