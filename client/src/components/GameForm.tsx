@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Game, GameInput, GameStatus, Platform, RawgResult } from "../types";
-import { createGame, updateGame } from "../api/games";
+import { createGame, deleteGame, updateGame } from "../api/games";
 import { STATUS_LABELS, STATUS_ORDER, formatScore, inputClass, toGameInput } from "../utils";
 import { RawgSearch } from "./RawgSearch";
 
@@ -9,6 +9,7 @@ type Props = {
   game?: Game;          // présent = modification, absent = ajout
   status: GameStatus;   // statut de départ du formulaire
   onSaved: (game: Game) => void;
+  onDeleted: (id: number) => void;
   onCancel: () => void;
 };
 
@@ -27,7 +28,7 @@ function emptyForm(status: GameStatus): GameInput {
   };
 }
 
-export function GameForm({ game, status, onSaved, onCancel }: Props) {
+export function GameForm({ game, status, onSaved, onDeleted, onCancel }: Props) {
   const [form, setForm] = useState<GameInput>(() =>
     game ? { ...toGameInput(game), status } : emptyForm(status)
   );
@@ -61,6 +62,27 @@ export function GameForm({ game, status, onSaved, onCancel }: Props) {
       setSaving(false);
     }
   }
+
+  async function handleDelete() {
+  if (!game) return;
+
+  const confirmed = window.confirm(
+    `Supprimer « ${game.title} » ? Cette action est définitive.`
+  );
+  if (!confirmed) return;
+
+  setSaving(true);
+  setError(null);
+
+  try {
+    await deleteGame(game.id);
+    onDeleted(game.id);
+  } catch (err) {
+    setError(err instanceof Error ? err.message : "Erreur inconnue");
+  } finally {
+    setSaving(false);
+  }
+}
 
   const isCompleted = form.status === "COMPLETED";
   const { storyScore, gameplayScore, artScore } = form;
@@ -156,21 +178,34 @@ export function GameForm({ game, status, onSaved, onCancel }: Props) {
 
       {error && <p className="text-red-400">{error}</p>}
 
-      <div className="flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-lg px-4 py-2 text-slate-300 hover:bg-slate-700"
-        >
-          Annuler
-        </button>
-        <button
-          type="submit"
-          disabled={saving || !form.title.trim()}
-          className="rounded-lg bg-emerald-500 px-4 py-2 font-semibold text-slate-900 hover:bg-emerald-400 disabled:opacity-50"
-        >
-          {saving ? "Enregistrement…" : game ? "Enregistrer" : "Ajouter"}
-        </button>
+     <div className="flex items-center gap-2">
+        {game && (
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={saving}
+            className="rounded-lg px-4 py-2 text-red-400 hover:bg-red-500/10 disabled:opacity-50"
+          >
+            Supprimer
+          </button>
+        )}
+
+        <div className="ml-auto flex gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-lg px-4 py-2 text-slate-300 hover:bg-slate-700"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            disabled={saving || !form.title.trim()}
+            className="rounded-lg bg-emerald-500 px-4 py-2 font-semibold text-slate-900 hover:bg-emerald-400 disabled:opacity-50"
+          >
+            {saving ? "Enregistrement…" : game ? "Enregistrer" : "Ajouter"}
+          </button>
+        </div>
       </div>
     </form>
   );

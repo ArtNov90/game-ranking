@@ -47,3 +47,10 @@ export async function searchRawg(query: string): Promise<RawgResult[]> {
   }
   return response.json();
 }
+
+export async function deleteGame(id: number): Promise<void> {
+  const response = await fetch(`/api/games/${id}`, { method: "DELETE" });
+  if (!response.ok) {
+    throw new Error(await errorMessage(response, "Impossible de supprimer le jeu"));
+  }
+}

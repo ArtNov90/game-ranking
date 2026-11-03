@@ -39,6 +39,11 @@ export function MyGamesPage() {
     setFormConfig(null);
   }
 
+    function handleDeleted(id: number) {
+    setGames((current) => current.filter((g) => g.id !== id));
+    setFormConfig(null);
+  }
+
   async function handleStatusChange(game: Game, status: GameStatus) {
     // Passer en "Terminé" demande des notes : on ouvre le formulaire
     if (status === "COMPLETED") {
@@ -74,6 +79,7 @@ export function MyGamesPage() {
           game={formConfig.game}
           status={formConfig.status}
           onSaved={handleSaved}
+           onDeleted={handleDeleted}
           onCancel={() => setFormConfig(null)}
         />
       )}
